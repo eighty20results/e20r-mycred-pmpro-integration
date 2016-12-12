@@ -1,0 +1,17 @@
+{
+  "name" : "Eighty/20 Results - Plugin Name",
+  "slug" : "e20r-mycred-pmpro-integration",
+  "download_url" : "https://eighty20results.com/protected-content/e20r-mycred-pmpro-integration/e20r-mycred-pmpro-integration-1.0.zip",
+  "version" : "1.0",
+  "tested": "4.6.1",
+  "requires": "3.9",
+  "author" : "Thomas Sjolshagen <thomas@eighty20results.com>",
+  "author_homepage": "https://eighty20results.com/thomas-sjolshagen",
+  "last_updated": "2016-09-23 11:00:00",
+  "homepage": "https://eighty20results.com/wordpress-plugins/e20r-mycred-pmpro-integration/",
+  "sections" : {
+    "description" : "",
+    "changelog": "<h3>1.0</h3><ol><li>Initial release of this myCred / PMPro integration plugin</li></ol>",
+    "faq": "<h3>I found a bug in the plugin.</h3>Please report your issue to us by using the <a href='https://eighty20results.com/forums/support/' target='_blank'>Support Forum</a> on The Eighty / 20 Website and we'll normally respond within 1 business day."
+    }
+}
