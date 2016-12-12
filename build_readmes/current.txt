@@ -1,1 +1,1 @@
-Initial release of this myCred / PMPro integration plugin
+ENHANCEMENT/BUG: Fix typo in help text

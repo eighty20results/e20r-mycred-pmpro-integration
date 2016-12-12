@@ -2,15 +2,14 @@
 Contributors: sjolshagen
 Tags: mycred, pmpro, paid memberships pro, members, memberships, integration
 Requires at least: 4.0
-Tested up to: 4.6.1
-Stable tag: 1.0
+Tested up to: 4.7
+Stable tag: 1.2.1
 
-Assign myCred points to certain PMPro member actions/activities
+Assign myCred points for Paid Memberships Pro member actions/activities
 
 == Description ==
 
 Administrator can configure myCred points for recurring membership payment renewals.
-
 
 == Installation ==
 
@@ -19,6 +18,25 @@ Administrator can configure myCred points for recurring membership payment renew
 1. Edit your membership levels and update the settings in the "Configure myCred" options for each membership level.
 
 == Changelog ==
+== 1.2.1 ==
+
+* ENHANCEMENT/BUG: Fix typo in help text
+
+== 1.2 ==
+
+* ENHANCEMENT: Added pmpro_checkout_confirmed handler, in case it's needed.
+* ENHANCEMENT: Help text for the point configuration
+* BUG/ENHANCEMENT: Fix variable name for the max point score for the level
+* BUG/ENHANCEMENT: Set input type to number for max score/points
+* BUG: Didn't wrap the test functionality in the WP_DEBUG requirement
+* ENHANCEMENT: Add PHPdoc
+
+== 1.1 ==
+
+* ENHANCEMENT: Adding support for max point limits and 'unlimited' points
+* ENHANCEMENT: Filter to define the value for the 'unlimited' points equivalent
+* BUG: Didn't include the e20rUtils class path
+
 == 1.0 ==
 
 * Initial release of this myCred / PMPro integration plugin

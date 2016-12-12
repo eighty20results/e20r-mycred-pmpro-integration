@@ -1,17 +1,17 @@
 {
-  "name" : "Eighty/20 Results - Plugin Name",
+  "name" : "Eighty/20 Results - Integrate myCred and Paid Memberships Pro",
   "slug" : "e20r-mycred-pmpro-integration",
-  "download_url" : "https://eighty20results.com/protected-content/e20r-mycred-pmpro-integration/e20r-mycred-pmpro-integration-1.0.zip",
-  "version" : "1.0",
-  "tested": "4.6.1",
+  "download_url" : "https://eighty20results.com/protected-content/e20r-mycred-pmpro-integration/e20r-mycred-pmpro-integration-1.2.1.zip",
+  "version" : "1.2.1",
+  "tested": "4.7",
   "requires": "3.9",
   "author" : "Thomas Sjolshagen <thomas@eighty20results.com>",
   "author_homepage": "https://eighty20results.com/thomas-sjolshagen",
   "last_updated": "2016-09-23 11:00:00",
   "homepage": "https://eighty20results.com/wordpress-plugins/e20r-mycred-pmpro-integration/",
   "sections" : {
-    "description" : "",
-    "changelog": "<h3>1.0</h3><ol><li>Initial release of this myCred / PMPro integration plugin</li></ol>",
+    "description" : "<p>Assign myCred points for Paid Memberships Pro member actions/activities</p>",
+    "changelog": "<h3>1.2.1</h3><ol><li>ENHANCEMENT/BUG: Fix typo in help text</li></ol><h3>1.2</h3><ol><li>ENHANCEMENT: Added pmpro_checkout_confirmed handler, in case it's needed.</li><li>ENHANCEMENT: Help text for the point configuration</li><li>BUG/ENHANCEMENT: Fix variable name for the max point score for the level</li><li>BUG/ENHANCEMENT: Set input type to number for max score/points</li><li>BUG: Didn't wrap the test functionality in the WP_DEBUG requirement</li><li>ENHANCEMENT: Add PHPdoc</li></ol><h3>1.1</h3><ol><li>ENHANCEMENT: Adding support for max point limits and 'unlimited' points</li><li>ENHANCEMENT: Filter to define the value for the 'unlimited' points equivalent</li><li>BUG: Didn't include the e20rUtils class path</li></ol><h3>1.0</h3><ol><li>Initial release of this myCred / PMPro integration plugin</li></ol>",
     "faq": "<h3>I found a bug in the plugin.</h3>Please report your issue to us by using the <a href='https://eighty20results.com/forums/support/' target='_blank'>Support Forum</a> on The Eighty / 20 Website and we'll normally respond within 1 business day."
     }
 }
