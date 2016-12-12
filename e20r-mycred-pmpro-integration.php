@@ -3,7 +3,7 @@
 Plugin Name: Eighty/20 Results - Integrate myCred and Paid Memberships Pro
 Plugin URI: https://eighty20results.com/wordpress-plugins/e20r-mycred-pmpro-integration/
 Description: Assign myCred points to certain PMPro member actions/activities
-Version: 1.0
+Version: 1.1
 Author: Eighty / 20 Results by Wicked Strong Chicks, LLC <thomas@eighty20results.com>
 Author URI: https://eighty20results.com/thomas-sjolshagen/
 Text Domain: e20r-mycred-pmpro-integration
@@ -27,8 +27,8 @@ License:
 
 */
 
-defined( 'ABSPATH' ) || die( __( 'Cannot access plugin sources directly', 'e20r-mycred-pmpro-integration') );
-define( 'E20R_NPF_VER', '1.0' );
+defined( 'ABSPATH' ) || die( __( 'Cannot access plugin sources directly', 'e20r-mycred-pmpro-integration' ) );
+define( 'E20R_NPF_VER', '1.1' );
 
 class e20rMyCredPmproIntegration {
 
@@ -164,6 +164,7 @@ class e20rMyCredPmproIntegration {
 				'renewal_points' => apply_filters( 'e20r-mycred-pmpro-default-score', 0 ),
 				'renewal_notice' => apply_filters( 'e20r-mycred-pmpro-default-notice', null ),
 				'point_type'     => apply_filters( 'e20r-mycred-pmpro-default-type', 'mycred_default' ),
+				'max_level_points'     => apply_filters( 'e20r-mycred-pmpro-default-max-level-points', 0 )
 			),
 		);
 	}
@@ -234,9 +235,12 @@ class e20rMyCredPmproIntegration {
 		$reference      = $this->getSetting( 'reference_text', $level_id );
 		$renewal_notice = $this->getSetting( 'renewal_notice', $level_id );
 		$type_key       = $this->getSetting( 'point_type', $level_id );
+		$max_level_points     = $this->getSetting( 'max_level_points', $level_id );
 		$text_size      = apply_filters( 'e20r-mycred-pmpro-textfield-size', 50 );
-		$plural         = 'Points';
-		$singular       = "Point";
+		$max_balance    = apply_filters( 'e20r-mycred-pmpro-max-balance', '999999' );
+
+		$plural   = "Points";
+		$singular = "Point";
 
 		if ( function_exists( 'mycred' ) ) {
 			$mycred   = mycred();
@@ -255,11 +259,10 @@ class e20rMyCredPmproIntegration {
                 </th>
                 <td class="e20r-settings-cell">
                     <input type="text"
-                           value="<?php esc_attr_e( $this->getSetting( 'reference_text', $level_id ) ); ?>"
+                           value="<?php esc_attr_e( $reference ); ?>"
                            name="e20r-mycpmp_reference-text" id="e20r-mycpmp_reference-text">
                 </td>
             </tr>
-
             <tr class="e20r-settings-row">
                 <th class="e20r-settings-cell">
                     <label for="e20r-mycpmp_renewal-points"><?php printf( __( "Renewal %s", "e20r-mycred-pmpro-integration" ), $plural ); ?></label>
@@ -270,6 +273,19 @@ class e20rMyCredPmproIntegration {
                            name="e20r-mycpmp_renewal-points" id="e20r-mycpmp_renewal-points">
                 </td>
             </tr>
+            <tr class="e20r-settings-row">
+                <th class="e20r-settings-cell">
+                    <label for="e20r-mycpmp_max-level-points"><?php printf( __( "%s balance (max)", "e20r-mycred-pmpro-integration" ), $singular ); ?></label>
+                </th>
+                <td class="e20r-settings-cell">
+                    <input type="text" size="20" name="e20r-mycpmp_max-level-points"
+                           id="e20r-mycpmp_max-level-points"
+                           value="<?php echo ! empty( $max_level_points ) ? esc_attr( $max_level_points ) : 0; ?>">
+                    <small><?php printf( __( "Use %d to signify 'unlimited'. Use '0' to signify no limit.", "e20r-mycred-pmpro-integration" ), $max_balance ); ?></small>
+
+                </td>
+            </tr>
+
             <tr class="e20r-settings-row">
                 <th class="e20r-settings-cell">
                     <label for="e20r-mycpmp_renewal-notice"><?php _e( "Renewal Notice (if enabled)", "e20r-mycred-pmpro-integration" ); ?></label>
@@ -287,7 +303,7 @@ class e20rMyCredPmproIntegration {
                     <input type="text" size="20" name="e20r-mycpmp_point-type"
                            id="e20r-mycpmp_point-type"
                            value="<?php echo ! empty( $type_key ) ? esc_attr( $type_key ) : null; ?>">
-                    <small><?php _e( "Leave blank if you want to use the default value (mycred_default)", "e20r-mycred-pmpro-integration"); ?></small>
+                    <small><?php _e( "Leave blank if you want to use the default value (mycred_default)", "e20r-mycred-pmpro-integration" ); ?></small>
                 </td>
             </tr>
             </tbody>
@@ -303,8 +319,14 @@ class e20rMyCredPmproIntegration {
 	public function subscriptionPaymentComplete( $order ) {
 
 		// myCred plugin missing/not loaded
-		if ( ! function_exists( 'mycred_exclude_user' ) ) {
+		if ( ! function_exists( 'mycred' ) ) {
 			error_log( "MyCred Plugin not found" );
+
+			return null;
+		}
+
+		if ( ! function_exists( 'pmpro_getLevel' ) ) {
+			error_log( "Paid Memberships Pro Plugin not loaded/active" );
 
 			return null;
 		}
@@ -332,31 +354,78 @@ class e20rMyCredPmproIntegration {
 			return null;
 		}
 
+		$point_type = $this->getSetting( 'point_type', $order->membership_id );
+		$mycred     = mycred( $point_type );
+
 		$level = pmpro_getLevel( $order->membership_id );
 
 		// Add the points to the mycred account for the user and add a notification message.
-		if ( ! empty( $level->id ) || false === mycred_exclude_user( $order->user_id ) ) {
-
-			$points_message =
-				apply_filters(
-					'e20r-mycred-pmpro-renewal-notice',
-					sprintf( "Your renewal of the %s level earned you %d points", $level->name, $score ),
-					$level,
-					$score
-				);
+		if ( ! empty( $level->id ) || false === $mycred->exclude_user( $order->user_id ) ) {
 
 			$point_description = $this->getSetting( 'reference_text', $order->membership_id );
-			$level_reference   = apply_filters( 'e20r-mycred-pmpro-default_type', 'Points for Renewal' );
-			$point_type        = $this->getSetting( 'point_type', $order->membership_id );
+			$max_level_balance = $this->getSetting( 'max_points', $order->membership_id );
 
-			if ( true === mycred_add( $level_reference, $order->user_id, $score, $point_description, date_i18n( 'Y-m-d', current_time( 'timestamp' ) ), $point_type ) ) {
+			$current_balance = $mycred->get_users_balance( $order->user_id );
 
-				if ( WP_DEBUG ) {
-					error_log( "Added {$score} points for {$order->user_id}" );
-				}
+			$level_reference = apply_filters( 'e20r-mycred-pmpro-default_type', 'Points for Renewal' );
+			$max_balance     = apply_filters( 'e20r-mycred-pmpro-max-balance', '999999' );
 
-				if ( function_exists( 'mycred_add_new_notice' ) ) {
+			$new_balance = $current_balance + $score;
+
+			// Keep the
+			if ( ! empty( $max_level_balance ) && ( $new_balance > $max_level_balance ) ) {
+				$score += ( $max_level_balance - $new_balance );
+			} else if ( ! empty( $max_level_balance ) && $max_level_balance == $max_balance ) {
+				$score += ( $max_balance - $current_balance );
+			}
+
+			if ( WP_DEBUG ) {
+				error_log( "Adding {$score} points to user {$order->user_id}" );
+			}
+
+			if ( !empty( $score) && true === $mycred->add_creds(
+					$level_reference,
+					$order->user_id,
+					$score,
+					$point_description,
+					date_i18n( 'Y-m-d', current_time( 'timestamp' ) ),
+					$point_type )
+			) {
+
+				if ( ( $score > 0 ) && function_exists( 'mycred_add_new_notice' ) ) {
+
+					// Level warrants unlimited points
+					if ( $max_level_balance == $max_balance ) {
+
+						$points_message =
+							apply_filters(
+								'e20r-mycred-pmpro-renewal-notice',
+								sprintf(
+									__( "Your payment for the %s membership level earned you unlimited %s",
+										"e20r-mycred-pmpro-integration" ),
+									$level->name, strtolower( $mycred->plural() ) ),
+								$level,
+								$score
+							);
+
+					} else {
+						$points_message =
+							apply_filters(
+								'e20r-mycred-pmpro-renewal-notice',
+								sprintf(
+									__( "Your payment for the %s membership level earned you %s %s",
+										"e20r-mycred-pmpro-integration" ),
+									$level->name, $score, strtolower( $mycred->plural() ) ),
+								$level,
+								$score
+							);
+					}
+
 					mycred_add_new_notice( array( 'user_id' => $order->user_id, 'message' => $points_message ) );
+				}
+			} else {
+				if ( WP_DEBUG ) {
+					error_log( "Unable to add {$score} points for {$order->user_id}" );
 				}
 			}
 		}
