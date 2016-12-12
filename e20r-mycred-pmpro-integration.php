@@ -285,7 +285,7 @@ class e20rMyCredPmproIntegration {
                     <input type="number" size="20" name="e20r-mycpmp_max-level-points"
                            id="e20r-mycpmp_max-level-points"
                            value="<?php echo ! empty( $max_level_points ) ? esc_attr( $max_level_points ) : 0; ?>">
-                    <small><?php printf( __( "Use %d to signify 'unlimited'. Use '0' to signify no limit.", "e20r-mycred-pmpro-integration" ), $max_balance ); ?></small>
+                    <small><?php printf( __( "Use %d to grant 'unlimited' points. Use '0' to signify that the membership level isn't capped", "e20r-mycred-pmpro-integration" ), $max_balance ); ?></small>
 
                 </td>
             </tr>
