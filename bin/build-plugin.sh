@@ -4,7 +4,7 @@
 #
 short_name="e20r-mycred-pmpro-integration"
 server="eighty20results.com"
-include=(css languages license LICENSES plugin-updates ${short_name}.php README.txt)
+include=(css languages license LICENSES plugin-updates utilities ${short_name}.php README.txt)
 exclude=(*.yml *.phar composer.* vendor)
 build=(plugin-updates/vendor/*.php)
 plugin_path="${short_name}"
