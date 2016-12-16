@@ -3,7 +3,7 @@ Contributors: sjolshagen
 Tags: mycred, pmpro, paid memberships pro, members, memberships, integration
 Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 
 Assign myCred points for Paid Memberships Pro member actions/activities
 
@@ -18,9 +18,14 @@ Administrator can configure myCred points for recurring membership payment renew
 1. Edit your membership levels and update the settings in the "Configure myCred" options for each membership level.
 
 == Changelog ==
+== 1.2.3 ==
+
+* BUG: Add points on checkout
+
 == 1.2.2 ==
 
 * BUG: Didn't load the settings correctly
+* ENHANCEMENT: Add points on checkout
 
 == 1.2.1 ==
 

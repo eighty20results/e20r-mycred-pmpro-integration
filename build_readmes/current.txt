@@ -1,1 +1,2 @@
 BUG: Didn't load the settings correctly
+BUG: Add points on checkout

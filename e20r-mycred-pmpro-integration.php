@@ -3,7 +3,7 @@
 Plugin Name: Eighty/20 Results - Integrate myCred and Paid Memberships Pro
 Plugin URI: https://eighty20results.com/wordpress-plugins/e20r-mycred-pmpro-integration/
 Description: Assign myCred points to certain PMPro member actions/activities
-Version: 1.2.2
+Version: 1.2.3
 Author: Eighty / 20 Results by Wicked Strong Chicks, LLC <thomas@eighty20results.com>
 Author URI: https://eighty20results.com/thomas-sjolshagen/
 Text Domain: e20r-mycred-pmpro-integration
