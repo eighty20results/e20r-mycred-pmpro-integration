@@ -3,7 +3,7 @@
 Plugin Name: Eighty/20 Results - Integrate myCred and Paid Memberships Pro
 Plugin URI: https://eighty20results.com/wordpress-plugins/e20r-mycred-pmpro-integration/
 Description: Assign myCred points to certain PMPro member actions/activities
-Version: 1.2.1
+Version: 1.2.2
 Author: Eighty / 20 Results by Wicked Strong Chicks, LLC <thomas@eighty20results.com>
 Author URI: https://eighty20results.com/thomas-sjolshagen/
 Text Domain: e20r-mycred-pmpro-integration
@@ -87,6 +87,10 @@ class e20rMyCredPmproIntegration {
 
 		if ( WP_DEBUG ) {
 			add_action( 'wp', array( $this, 'runTestUpdateBilling' ) );
+		}
+
+		if ( empty( $this->settings ) ) {
+			$this->settings = get_option( 'e20r_mycpmp', $this->defaultSettings() );
 		}
 
 		// FIXME: Should not be needed if the IPN is configured
@@ -183,9 +187,14 @@ class e20rMyCredPmproIntegration {
 		if ( empty( $this->settings ) ) {
 			$this->settings = get_option( 'e20r_mycpmp', $this->defaultSettings() );
 		}
-		$defaults = $this->defaultSettings();
 
-		return ( isset( $this->settings[ $level_id ][ $key ] ) ? $this->settings[ $level_id ][ $key ] : $defaults['default'][ $key ] );
+		$defaults = $this->defaultSettings();
+        $value = isset( $this->settings[ $level_id ][ $key ] ) ? $this->settings[ $level_id ][ $key ] : $defaults['default'][ $key ];
+
+        if (WP_DEBUG) {
+            error_log("{$key} setting returned for {$level_id}: {$value}");
+        }
+		return $value;
 	}
 
 	public function saveLevelSettings( $level_id ) {
@@ -284,7 +293,7 @@ class e20rMyCredPmproIntegration {
                 <td class="e20r-settings-cell">
                     <input type="number" size="20" name="e20r-mycpmp_max-level-points"
                            id="e20r-mycpmp_max-level-points"
-                           value="<?php echo ! empty( $max_level_points ) ? esc_attr( $max_level_points ) : 0; ?>">
+                           value="<?php echo !empty( $max_level_points ) ? esc_attr( $max_level_points ) : 0; ?>">
                     <small><?php printf( __( "Use %d to grant 'unlimited' points. Use '0' to signify that the membership level isn't capped", "e20r-mycred-pmpro-integration" ), $max_balance ); ?></small>
 
                 </td>
