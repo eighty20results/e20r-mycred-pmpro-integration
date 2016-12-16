@@ -1,1 +1,1 @@
-ENHANCEMENT/BUG: Fix typo in help text
+BUG: Didn't load the settings correctly

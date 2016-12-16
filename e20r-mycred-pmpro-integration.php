@@ -28,7 +28,7 @@ License:
 */
 
 defined( 'ABSPATH' ) || die( __( 'Cannot access plugin sources directly', 'e20r-mycred-pmpro-integration' ) );
-define( 'E20R_NPF_VER', '1.2.1' );
+define( 'E20R_NPF_VER', '1.2.2' );
 
 class e20rMyCredPmproIntegration {
 
