@@ -93,8 +93,7 @@ class e20rMyCredPmproIntegration {
 			$this->settings = get_option( 'e20r_mycpmp', $this->defaultSettings() );
 		}
 
-		// FIXME: Should not be needed if the IPN is configured
-		// add_filter( 'pmpro_checkout_confirmed', array( $this, 'checkoutConfirmed', 10, 2 ) );
+		add_action( 'pmpro_checkout_before_change_membership_level', array( $this, 'checkoutConfirmed'), 10, 2 );
 	}
 
 	public function checkLicense( $reply, $package, $upgrader ) {
@@ -452,18 +451,14 @@ class e20rMyCredPmproIntegration {
 	/**
      * Wrapper for the checkout process (when the checkout - payment - is confirmed).
      *
-	 * @param bool $isConfirmed
+	 * @param int $user_id
 	 * @param MemberOrder $order
      *
-     * @return bool
 	 */
-	public function checkoutConfirmed( $isConfirmed, $order ) {
+	public function checkoutConfirmed( $user_id, $order ) {
 
-	    if ( true === $isConfirmed ) {
-	        $isConfirmed = $this->subscriptionPaymentComplete( $order );
-        }
-
-        return $isConfirmed;
+	    $order->user_id = $user_id;
+        $this->subscriptionPaymentComplete( $order );
     }
 
 	/**
