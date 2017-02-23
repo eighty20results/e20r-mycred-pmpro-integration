@@ -3,14 +3,14 @@
 Plugin Name: Eighty/20 Results - Integrate myCred and Paid Memberships Pro
 Plugin URI: https://eighty20results.com/wordpress-plugins/e20r-mycred-pmpro-integration/
 Description: Assign myCred points to certain PMPro member actions/activities
-Version: 1.2.3
+Version: 1.2.4
 Author: Eighty / 20 Results by Wicked Strong Chicks, LLC <thomas@eighty20results.com>
 Author URI: https://eighty20results.com/thomas-sjolshagen/
 Text Domain: e20r-mycred-pmpro-integration
 Domain Path: /languages
 License:
 
-	Copyright 2016 - Eighty / 20 Results by Wicked Strong Chicks, LLC (thomas@eighty20results.com)
+	Copyright 2016-2017 - Eighty / 20 Results by Wicked Strong Chicks, LLC (thomas@eighty20results.com)
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License, version 2, as
@@ -28,7 +28,7 @@ License:
 */
 
 defined( 'ABSPATH' ) || die( __( 'Cannot access plugin sources directly', 'e20r-mycred-pmpro-integration' ) );
-define( 'E20R_NPF_VER', '1.2.2' );
+define( 'E20R_NPF_VER', '1.2.4' );
 
 class e20rMyCredPmproIntegration {
 
@@ -383,7 +383,7 @@ class e20rMyCredPmproIntegration {
 			$current_balance = $mycred->get_users_balance( $order->user_id );
 
 			$level_reference = apply_filters( 'e20r-mycred-pmpro-default_type', 'Points for Renewal' );
-			$max_balance     = apply_filters( 'e20r-mycred-pmpro-max-balance', '999999' );
+			$max_balance     = apply_filters( 'e20r-mycred-pmpro-max-balance', '0' ); // unlimited # of points
 
 			$new_balance = $current_balance + $score;
 
