@@ -1,2 +1,1 @@
-BUG: Didn't load the settings correctly
-BUG: Add points on checkout
+ENH/FIX: Set default max points to 0 (unlimited)
